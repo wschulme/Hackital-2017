@@ -1,26 +1,74 @@
+<!DOCTYPE html>
 <html>
-<head>
-</head>
+	<head>
+	<title>Logo Finder</title>
+	<link href='https://fonts.googleapis.com/css?family=Dekko' rel='stylesheet'>
+	<link href="https://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet">
+			<style>	
+			body{
+			background-color:#000000;
+			}
+			h1{
+			text-align: center;
+			font-family: 'Raleway', sans-serif;
+			font-size: 100px;
+			color: #ffffff;
+			font-weight: 100;
+			border-color: yellow;
+			}
+			.output{
+			text-align: center;
+			width: 750px;
+			margin: auto;
+			border-radius:150px;
+			}
+			img{
+			max-width: 20%;
+			max-height: 20%;
+			display: block;
+			margin: 0 auto;
+			}
+			h2{
+			text-align: center;
+			font-family: 'Raleway', sans-serif;
+			font-size: 45px;
+			color: #ffffff;
+			font-weight: 100;
+			}
+			.input{
+			display: block;
+  			margin-left: auto;
+ 			margin-right: auto;
+			}
+			h3{
+			color: #ffffff;
+			font-family: 'Raleway', sans-serif;
+			font-weight: 100;
+			}
+			
+			
+			</style>	
+	</head>
 <body>
-
-<table>
-<tr>
-  <th>Name</th>
-  <th>Percent</th>
-</tr>
-<tr>
-  <td>@FIRST_NAME@</td>
-  <td>@FIRST_PERCENT@</td>
-</tr>
-<tr>
-  <td>@SECOND_NAME@</td>
-  <td>@SECOND_PERCENT@</td>
-</tr>
-<tr>
-  <td>@THIRD_NAME@</td>
-  <td>@THIRD_PERCENT@</td>
-</tr>
-</table>
-
+<br>
+<h1>neuralogo.</h1>
+<div class="output">
+<h2>we believe...</h2>
+<h2> your image is...</h2>
+<h2>@FIRST_NAME@</h2>
+<h3>(we're @FIRST_PERCENT@% sure!)<br>
+<br>
+<br>
+with a chance of it being either <u>@SECOND_NAME@</u> or <u>@THIRD_NAME@</u>
+</h3>
+<br>
+</div>
+<br>
+<br>
+<br>
+<div>
+<img src="https://static.mlh.io/brand-assets/logo/official/mlh-logo-color.png" alt="mlh">
+</div>
 </body>
+
 </html>

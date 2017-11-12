@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -180,15 +181,18 @@ public class Main {
                     File output = new File(path + "output.txt");
                     String[] data = Main.parseOutput(output);
                     
-                    //response.replace("@FIRST_NAME@", data[0]);
-                    //response.replace("@FIRST_PERCENT@", data[1]);
+                    response = response.replaceAll("@temppath@", output.getAbsolutePath());
+                    System.out.println(output.getAbsolutePath());
+  
                     response = response.replaceAll("@FIRST_NAME@", data[0]);
-                    response = response.replaceAll("@FIRST_PERCENT@", data[1]);
+                    
+                		DecimalFormat df = new DecimalFormat("##.##");
+                		Double dd = Double.parseDouble(data[1])*100;
+                    response = response.replaceAll("@FIRST_PERCENT@", df.format(dd).toString());
                     
                     response = response.replaceAll(Pattern.quote("@SECOND_NAME@"), data[2]);
                     response = response.replaceAll(Pattern.quote("@SECOND_PERCENT@"), data[3]);
 
-                    
                     response =  response.replaceAll(Pattern.quote("@THIRD_NAME@"), data[4]);
                     response =  response.replaceAll(Pattern.quote("@THIRD_PERCENT@"), data[5]);
                     
