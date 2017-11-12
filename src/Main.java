@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,7 +11,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
-
+import java.util.regex.Pattern;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -40,7 +42,7 @@ public class Main {
 	public static String loadStaticPage(String name) {
 	String response = "";
     
-    InputStream in = Main.class.getClassLoader().getResourceAsStream("test.html");
+    InputStream in = Main.class.getClassLoader().getResourceAsStream(name);
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
     
     String line = null;
@@ -111,12 +113,7 @@ public class Main {
                     }
 
                 });
-                t.getResponseHeaders().add("Content-type", "text/plain");
-                t.sendResponseHeaders(200, 0);
-                OutputStream os = t.getResponseBody();               
                 for(FileItem fi : result) {
-                    os.write(fi.getName().getBytes());
-                    os.write("\r\n".getBytes());
                     
 
                     String path = "/tmp/" + getSaltString() + "/";                    
@@ -139,19 +136,105 @@ public class Main {
                     }
                     fos.close();
                     
-                   
+                    String s = null;
+
+                    try {
+                        
+                    	// run the Unix "ps -ef" command
+                    	// using the Runtime exec method:
+                    	Process p = Runtime.getRuntime().exec("/Users/rohithvenkatesh/Desktop/machinelearning.command " + outputimage.getPath() + " " + path + "output.txt");
+
+                    	BufferedReader stdInput = new BufferedReader(new 
+                    			InputStreamReader(p.getInputStream()));
+
+                    	BufferedReader stdError = new BufferedReader(new 
+                    			InputStreamReader(p.getErrorStream()));
+
+                    	// read the output from the command
+                    	System.out.println("Here is the standard output of the command:\n");
+                    	while ((s = stdInput.readLine()) != null) {
+                    		System.out.println(s);
+                    	}
+
+                    	// read any errors from the attempted command
+                    	System.out.println("Here is the standard error of the command (if any):\n");
+                    	while ((s = stdError.readLine()) != null) {
+                    		System.out.println(s);
+                    	}
+
+                    }
+                    catch (IOException e) {
+                    	System.out.println("exception happened - here's what I know: ");
+                    	e.printStackTrace();
+                    }
+                
+
             	      
             	      
               	 
                     
                     System.out.println("File-Item: " + fi.getFieldName() + " = " + fi.getName());
+                    
+                    String response = Main.loadStaticPage("result.html");
+                    
+                    File output = new File(path + "output.txt");
+                    String[] data = Main.parseOutput(output);
+                    
+                    //response.replace("@FIRST_NAME@", data[0]);
+                    //response.replace("@FIRST_PERCENT@", data[1]);
+                    response = response.replaceAll("@FIRST_NAME@", data[0]);
+                    response = response.replaceAll("@FIRST_PERCENT@", data[1]);
+                    
+                    response = response.replaceAll(Pattern.quote("@SECOND_NAME@"), data[2]);
+                    response = response.replaceAll(Pattern.quote("@SECOND_PERCENT@"), data[3]);
+
+                    
+                    response =  response.replaceAll(Pattern.quote("@THIRD_NAME@"), data[4]);
+                    response =  response.replaceAll(Pattern.quote("@THIRD_PERCENT@"), data[5]);
+                    
+                    //t.getResponseHeaders().add("Content-type", "text/result.plain");
+                    t.sendResponseHeaders(200, response.length());
+                    OutputStream os = t.getResponseBody();
+                    
+
+                    os.write(response.getBytes());
+                    os.close();
+
                 }
-                os.close();
 
             } catch (Exception e) {
                 e.printStackTrace();
-            }            
+            }
+            
         }
+    }
+    
+    static String[] parseOutput(File output) {
+    	  String[] data = new String[6];
+    	  
+			FileReader fileReader;
+			try {
+				fileReader = new FileReader(output);
+
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			String line;
+			int i = 0;
+			while ((line = bufferedReader.readLine()) != null) {
+				data[i] = line.substring(0, line.indexOf(' '));
+				data[i + 1] = line.substring(line.indexOf(' ') + 1, line.length());
+				i += 2;
+				if (i == 6) {
+					break;
+				}
+			}
+			
+			fileReader.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+    	  return data;
     }
 }
 
