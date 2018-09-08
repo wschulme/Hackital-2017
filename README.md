@@ -1,2 +1,2 @@
 # Hackital-2017
-lol
+Front end for neuralogo.
